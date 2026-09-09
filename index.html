@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1,
+maximum-scale=1,
+user-scalable=no,
+viewport-fit=cover">
 
 <title>USSD Simulator</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
@@ -16,185 +24,397 @@ html,body{
     width:100%;
     height:100%;
     margin:0;
+    padding:0;
     overflow:hidden;
-    background:#111;
+    background:#000;
     font-family:Arial,Tahoma,sans-serif;
 }
 
 .phone{
-    width:100%;
-    max-width:400px;
-    height:96vh;
-    margin:2vh auto;
+    position:relative;
+    width:calc(100% - 18px);
+    height:calc(100% - 28px);
+    margin:14px auto;
     background:#fff;
+    overflow:hidden;
+    border-radius:30px;
+
     display:flex;
     flex-direction:column;
-    position:relative;
-    overflow:hidden;
-    border-radius:18px;
+
+    box-shadow:
+        0 0 0 2px #080808,
+        0 8px 35px rgba(0,0,0,.5);
 }
 
-/* علامة المحاكاة */
-.simulation{
-    position:absolute;
-    top:7px;
-    right:8px;
-    z-index:20;
-    background:#555;
-    color:#fff;
-    padding:4px 8px;
-    border-radius:12px;
-    font-size:8px;
-}
 
-/* الأعلى */
+/* =========================
+   TOP
+========================= */
+
 .top{
-    height:50px;
-    min-height:50px;
+    position:relative;
+
+    height:78px;
+    min-height:78px;
+
     background:#fff;
-    border-bottom:1px solid #eee;
+
+    border:0;
+
     display:flex;
-    align-items:center;
-    padding:0 18px;
+    align-items:flex-start;
+    justify-content:flex-start;
+
+    padding:24px 20px 0;
 }
 
-.close{
-    font-size:30px;
-    font-weight:300;
-    color:#333;
-}
 
-/* الاختيارات */
+/* =========================
+   ACTIONS
+========================= */
+
 .actions{
-    height:180px;
-    min-height:180px;
+    height:185px;
+    min-height:185px;
+
     background:#fff;
-    padding:10px 22px;
+
+    padding:4px 30px 0;
+
+    direction:ltr;
+
+    /* رفع الكلام الإنجليزي لفوق */
+    position:relative;
+    top:-48px;
 }
 
 .action{
-    height:52px;
+    height:55px;
+
     display:flex;
     align-items:center;
-    gap:15px;
+    justify-content:flex-start;
+
+    flex-direction:row;
+
+    gap:18px;
+
     color:#333;
+
+    /* تصغير الكلام شوية */
     font-size:17px;
+
+    white-space:nowrap;
+    direction:ltr;
+}
+
+.action > div:last-child{
+    transform:translateY(-3px);
 }
 
 .action-icon{
-    width:27px;
-    text-align:center;
-    font-size:23px;
-}
+    width:32px;
+    min-width:32px;
+    height:38px;
 
-/* الرقم */
-.number-area{
-    height:78px;
-    min-height:78px;
-    background:#fff;
-    position:relative;
     display:flex;
     align-items:center;
-    padding:0 55px;
-    overflow:hidden;
+    justify-content:center;
+
+    position:relative;
+}
+
+
+/* =========================
+   PERSON ICON
+========================= */
+
+.person-icon{
+    position:relative;
+
+    width:15px;
+    height:15px;
+
+    border:2px solid #555;
+    border-radius:50%;
+
+    top:-9px;
+}
+
+.person-icon::after{
+    content:"";
+
+    position:absolute;
+
+    width:25px;
+    height:16px;
+
+    left:50%;
+    transform:translateX(-50%);
+
+    top:16px;
+
+    border:2px solid #555;
+    border-bottom:0;
+
+    border-radius:18px 18px 0 0;
+}
+
+
+/* =========================
+   MESSAGE ICON
+========================= */
+
+.message-icon{
+    position:relative;
+
+    width:31px;
+    height:25px;
+
+    border:2px solid #555;
+    border-radius:50%;
+}
+
+.message-icon::after{
+    content:"";
+
+    position:absolute;
+
+    left:3px;
+    bottom:-6px;
+
+    width:9px;
+    height:9px;
+
+    border-left:2px solid #555;
+    border-bottom:2px solid #555;
+
+    transform:rotate(-18deg);
+
+    background:#fff;
+}
+
+
+/* =========================
+   NUMBER
+========================= */
+
+.number-area{
+    height:80px;
+    min-height:80px;
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#fff;
+
+    padding:0 70px;
 }
 
 .number{
     width:100%;
-    height:52px;
-    line-height:52px;
+    height:55px;
+
+    line-height:55px;
+
     direction:ltr;
     unicode-bidi:plaintext;
-    font-size:29px;
-    font-weight:400;
-    letter-spacing:1px;
+
+    text-align:center;
+
     white-space:nowrap;
     overflow:hidden;
-    text-align:center;
-    transition:font-size .13s ease,
-               letter-spacing .13s ease;
+
+    font-size:31px;
+    font-weight:400;
+
+    letter-spacing:1px;
+
+    transition:
+        font-size .13s ease,
+        letter-spacing .13s ease;
 }
+
+
+/* =========================
+   DELETE
+========================= */
 
 .delete{
     position:absolute;
-    left:19px;
-    top:23px;
-    width:34px;
-    height:34px;
+
+    left:23px;
+    top:22px;
+
+    width:42px;
+    height:38px;
+
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:23px;
+
     color:#555;
-    z-index:3;
+
+    font-size:29px;
+
     cursor:pointer;
 }
 
-/* لوحة الأرقام */
+
+/* =========================
+   THREE DOTS
+========================= */
+
+.more{
+    position:absolute;
+
+    right:18px;
+    top:18px;
+
+    width:38px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:transparent;
+    border:0;
+
+    color:#444;
+
+    font-size:30px;
+    line-height:1;
+
+    cursor:pointer;
+
+    padding:0;
+}
+
+.more:active{
+    transform:scale(.9);
+}
+
+
+/* =========================
+   KEYPAD
+========================= */
+
 .keypad{
     flex:1;
     min-height:0;
-    padding:5px 18px 7px;
+
     background:#fff;
+
+    padding:6px 22px 2px;
+
     direction:ltr;
 }
 
 .keys{
     width:100%;
+
     display:grid;
+
     grid-template-columns:repeat(3,1fr);
-    gap:8px;
+
+    gap:9px;
+
     direction:ltr;
 }
 
 .key{
-    height:57px;
+    height:61px;
+
     border:0;
-    border-radius:31px;
-    background:#f3efec;
+    border-radius:34px;
+
+    background:#f3f0ed;
     color:#333;
+
     font-family:Arial,Tahoma,sans-serif;
-    font-size:23px;
+
+    font-size:25px;
     font-weight:400;
+
     text-align:center;
     direction:ltr;
+
     cursor:pointer;
-    transition:transform .08s,background .08s;
+    padding:0;
+
+    transition:
+        transform .08s,
+        background .08s;
 }
 
 .key small{
     display:block;
-    font-size:9px;
+
+    font-size:10px;
+    line-height:12px;
+
     font-weight:400;
+
     letter-spacing:1px;
+
     margin-top:2px;
 }
 
 .key:active{
-    transform:scale(.96);
-    background:#e7e2df;
+    transform:scale(.95);
+    background:#e6e2df;
 }
 
-/* منطقة الاتصال */
+
+/* =========================
+   CALL
+========================= */
+
 .call-box{
-    height:68px;
-    min-height:68px;
+    height:58px;
+    min-height:58px;
+
     flex-shrink:0;
+
     background:#fff;
+
     display:flex;
-    align-items:center;
+
+    align-items:flex-start;
     justify-content:center;
-    padding:0;
+
+    padding:0 0 4px;
 }
 
 .call{
-    width:195px;
-    height:53px;
+    width:175px;
+    height:50px;
+
     border:0;
     border-radius:30px;
-    background:#23843b;
+
+    background:#23883e;
     color:#fff;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    direction:ltr;
+
+    gap:10px;
+
+    font-family:Arial,Tahoma,sans-serif;
+
     font-size:20px;
+    font-weight:400;
+
     cursor:pointer;
 }
 
@@ -202,139 +422,257 @@ html,body{
     transform:scale(.97);
 }
 
-/* الأسفل */
-.bottom{
-    height:60px;
-    min-height:60px;
-    flex-shrink:0;
-    background:#fff;
-    border-top:1px solid #eee;
+
+/* =========================
+   CALL ICON
+========================= */
+
+.call-icon{
+    width:25px;
+    height:25px;
+
     display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+}
+
+.call-icon svg{
+    width:25px;
+    height:25px;
+
+    display:block;
+
+    fill:#fff;
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.bottom{
+    height:68px;
+    min-height:68px;
+
+    flex-shrink:0;
+
+    background:#fff;
+
+    border-top:0;
+
+    display:flex;
+
+    direction:ltr;
+
     justify-content:space-around;
     align-items:center;
+
     color:#666;
 }
 
 .bottom-item{
+    width:50%;
+
+    height:58px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
     text-align:center;
-    font-size:11px;
+
+    font-size:12px;
+
+    border-radius:14px;
+
+    transition:.15s;
+
+    direction:rtl;
+}
+
+.bottom-item.selected{
+    color:#111;
+    background:#f2efec;
+}
+
+.bottom-item.home-item{
+    color:#111;
 }
 
 .bottom-icon{
     display:block;
-    font-size:22px;
-    margin-bottom:2px;
+
+    height:29px;
+
+    font-size:27px;
+
+    line-height:27px;
+
+    margin-bottom:3px;
 }
 
-/* النوافذ */
+
+/* =========================
+   USSD OVERLAY
+========================= */
+
 .overlay{
     position:fixed;
+
     inset:0;
-    background:rgba(0,0,0,.32);
+
+    background:rgba(0,0,0,.30);
+
     display:none;
+
     align-items:center;
     justify-content:center;
+
     padding:20px;
+
     z-index:100;
 }
 
-/* نافذة USSD */
 .dialog{
-    width:90%;
-    max-width:330px;
+    width:92%;
+    max-width:355px;
+
     background:#fffaf7;
-    border-radius:22px;
-    padding:18px 18px 13px;
-    box-shadow:0 10px 35px rgba(0,0,0,.28);
+
+    border-radius:24px;
+
+    padding:
+        20px
+        19px
+        14px;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.28);
+
     animation:pop .18s ease;
 }
 
 @keyframes pop{
+
     from{
         transform:scale(.93);
         opacity:0;
     }
+
     to{
         transform:scale(1);
         opacity:1;
     }
 }
 
-/*
-   الترتيب المطلوب:
-   1 على اليمين
-   ثم رسالة
-   ثم Vodafone
-*/
+
 .dialog-header{
     display:flex;
+
     align-items:center;
     justify-content:center;
+
     direction:rtl;
-    gap:6px;
-    font-size:17px;
+
+    gap:7px;
+
+    font-size:18px;
+
     color:#222;
-    margin-bottom:12px;
+
+    margin-bottom:14px;
 }
 
 .ussd-text{
     direction:ltr;
+
     display:inline-block;
 }
 
 .badge{
     display:inline-flex;
-    width:29px;
-    height:29px;
+
+    width:30px;
+    height:30px;
+
     align-items:center;
     justify-content:center;
+
     border-radius:8px;
+
     background:#e52c3d;
+
     color:#fff;
+
     font-size:16px;
+
     font-weight:bold;
-    flex-shrink:0;
 }
 
-/* الرسالة */
+
 .message{
-    min-height:0;
     color:#333;
-    font-size:15px;
-    line-height:1.5;
+
+    font-size:16px;
+
+    line-height:1.55;
+
     text-align:right;
+
     white-space:pre-line;
+
     margin:0;
 }
 
-/* الإدخال */
+
 .ussd-input{
     width:100%;
-    height:38px;
+    height:40px;
+
     border:0;
+
     border-bottom:1px solid #777;
+
     outline:none;
+
     background:transparent;
-    font-size:16px;
+
+    font-size:17px;
+
     direction:ltr;
+
     text-align:right;
+
     margin-top:7px;
 }
 
-/* الأزرار */
+
 .buttons{
     display:flex;
+
     justify-content:space-between;
     align-items:center;
-    margin-top:10px;
+
+    margin-top:11px;
 }
 
 .buttons button{
     border:0;
+
     background:transparent;
+
     color:#777;
-    font-size:15px;
+
+    font-size:16px;
+
     padding:5px 14px;
+
     cursor:pointer;
 }
 
@@ -342,61 +680,114 @@ html,body{
     color:#333;
 }
 
-/* التحميل */
+
+/* =========================
+   LOADING
+========================= */
+
 .loader{
-    width:220px;
-    max-width:220px;
+    width:280px;
+    max-width:280px;
+
+    min-height:155px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
     text-align:center;
-    padding:17px 14px 15px;
+
+    padding:22px 18px 20px;
 }
 
 .loader-title{
-    font-size:17px;
+    font-size:19px;
+
     color:#333;
+
+    direction:rtl;
 }
 
-/* دائرة متساوية تمامًا */
 .spinner{
-    width:36px;
-    height:36px;
-    min-width:36px;
-    min-height:36px;
-    margin:15px auto 1px;
+    width:43px;
+    height:43px;
+
+    min-width:43px;
+    min-height:43px;
+
+    margin:14px auto 0;
+
     border:4px solid #ddd;
+
     border-top:4px solid #23843b;
+
     border-radius:50%;
+
     animation:spin .8s linear infinite;
-    display:block;
 }
 
 @keyframes spin{
+
     to{
         transform:rotate(360deg);
     }
 }
 
-/* شاشات قصيرة */
-@media(max-height:650px){
+
+/* =========================
+   SHORT SCREEN
+========================= */
+
+@media(max-height:700px){
 
     .phone{
-        width:100%;
-        height:100vh;
-        margin:0 auto;
-        border-radius:0;
+        width:calc(100% - 12px);
+
+        height:calc(100% - 12px);
+
+        margin:6px auto;
+
+        border-radius:25px;
+    }
+
+    .top{
+        height:65px;
+        min-height:65px;
+
+        padding-top:19px;
     }
 
     .actions{
-        height:155px;
-        min-height:155px;
+        height:150px;
+        min-height:150px;
+
+        padding-top:0;
+
+        /* رفع الكلام لفوق حتى في الشاشة القصيرة */
+        top:-48px;
     }
 
     .action{
-        height:45px;
+        height:46px;
+
+        font-size:16px;
+    }
+
+    .action > div:last-child{
+        transform:translateY(-2px);
     }
 
     .number-area{
-        height:72px;
-        min-height:72px;
+        height:67px;
+        min-height:67px;
+    }
+
+    .more{
+        top:12px;
+        right:14px;
     }
 
     .key{
@@ -404,62 +795,143 @@ html,body{
     }
 
     .call-box{
-        height:62px;
-        min-height:62px;
+        height:53px;
+        min-height:53px;
+
+        padding:0 0 3px;
+    }
+
+    .call{
+        width:165px;
+        height:46px;
+
+        font-size:19px;
+    }
+
+    .call-icon{
+        width:24px;
+        height:24px;
+    }
+
+    .call-icon svg{
+        width:24px;
+        height:24px;
     }
 
     .bottom{
         height:55px;
         min-height:55px;
+
+        border-top:0;
+    }
+
+    .bottom-item{
+        height:49px;
     }
 }
+
+
+/* =========================
+   LARGE PHONE
+========================= */
+
+@media(min-width:431px){
+
+    .phone{
+        max-width:430px;
+    }
+}
+
 </style>
 </head>
+
 
 <body>
 
 <div class="phone">
 
-    <div class="simulation"> </div>
 
-    <div class="top">
-        <div class="close">×</div>
-    </div>
+    <!-- TOP -->
+
+    <div class="top"></div>
+
+
+    <!-- ACTIONS -->
 
     <div class="actions">
 
         <div class="action">
-            <div class="action-icon">♙</div>
-            <div>إنشاء جهة اتصال جديدة</div>
+
+            <div class="action-icon">
+                <div class="person-icon"></div>
+            </div>
+
+            <div>
+                Create new contact
+            </div>
+
         </div>
 
-        <div class="action">
-            <div class="action-icon">♙</div>
-            <div>إضافة إلى جهة اتصال</div>
-        </div>
 
         <div class="action">
-            <div class="action-icon">◯</div>
-            <div>إرسال رسالة</div>
+
+            <div class="action-icon">
+                <div class="person-icon"></div>
+            </div>
+
+            <div>
+                Add to a contact
+            </div>
+
+        </div>
+
+
+        <div class="action">
+
+            <div class="action-icon">
+                <div class="message-icon"></div>
+            </div>
+
+            <div>
+                Send a message
+            </div>
+
         </div>
 
     </div>
+
+
+    <!-- NUMBER -->
 
     <div class="number-area">
 
-        <div class="delete" onclick="deleteNumber()">
+        <div class="delete"
+             onclick="deleteNumber()">
             ⌫
         </div>
 
-        <div class="number" id="display"></div>
+        <div class="number"
+             id="display">
+        </div>
+
+        <button class="more"
+                onclick="moreMenu()"
+                aria-label="More">
+            ⋮
+        </button>
 
     </div>
+
+
+    <!-- KEYPAD -->
 
     <div class="keypad">
 
         <div class="keys">
 
-            <button class="key" onclick="add('1')">1</button>
+            <button class="key" onclick="add('1')">
+                1
+            </button>
 
             <button class="key" onclick="add('2')">
                 2
@@ -518,24 +990,74 @@ html,body{
 
     </div>
 
+
+    <!-- CALL -->
+
     <div class="call-box">
 
-        <button class="call" onclick="startUSSD()">
-             اتصال
+        <button class="call"
+                onclick="startUSSD()">
+
+            <span class="call-icon">
+
+                <svg viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+
+                    <path d="
+                    M6.62 10.79
+                    C8.06 13.62 10.38 15.94 13.21 17.38
+                    L15.41 15.18
+                    C15.69 14.90 16.08 14.81 16.44 14.93
+                    C17.59 15.31 18.82 15.52 20.09 15.52
+                    C20.64 15.52 21.09 15.97 21.09 16.52
+                    V20.01
+                    C21.09 20.56 20.64 21.01 20.09 21.01
+                    C10.65 21.01 3 13.36 3 3.92
+                    C3 3.37 3.45 2.92 4 2.92
+                    H7.5
+                    C8.05 2.92 8.5 3.37 8.5 3.92
+                    C8.5 5.19 8.71 6.42 9.09 7.57
+                    C9.21 7.93 9.12 8.32 8.84 8.60
+                    L6.62 10.79
+                    Z
+                    "/>
+
+                </svg>
+
+            </span>
+
+            <span>
+                اتصال
+            </span>
+
         </button>
 
     </div>
 
+
+    <!-- BOTTOM -->
+
     <div class="bottom">
 
-        <div class="bottom-item">
-            <span class="bottom-icon">⌂</span>
+        <div class="bottom-item home-item">
+
+            <span class="bottom-icon">
+                ⌂
+            </span>
+
             الصفحة الرئيسية
+
         </div>
 
-        <div class="bottom-item">
-            <span class="bottom-icon">⠿</span>
+
+        <div class="bottom-item selected">
+
+            <span class="bottom-icon">
+                ⠿
+            </span>
+
             لوحة المفاتيح
+
         </div>
 
     </div>
@@ -543,17 +1065,24 @@ html,body{
 </div>
 
 
-<!-- نافذة USSD -->
+<!-- =========================
+     USSD WINDOW
+========================= -->
 
-<div class="overlay" id="ussdOverlay">
+<div class="overlay"
+     id="ussdOverlay">
 
     <div class="dialog">
 
         <div class="dialog-header">
 
-            <span class="badge">1</span>
+            <span class="badge">
+                1
+            </span>
 
-            <span>رسالة</span>
+            <span>
+                رسالة
+            </span>
 
             <span class="ussd-text">
                 Vodafone
@@ -561,7 +1090,11 @@ html,body{
 
         </div>
 
-        <div class="message" id="message"></div>
+
+        <div class="message"
+             id="message">
+        </div>
+
 
         <input
             id="ussdInput"
@@ -569,13 +1102,15 @@ html,body{
             autocomplete="off"
             inputmode="numeric">
 
+
         <div class="buttons">
 
             <button onclick="closeUSSD()">
                 إلغاء
             </button>
 
-            <button class="send" onclick="sendUSSD()">
+            <button class="send"
+                    onclick="sendUSSD()">
                 إرسال
             </button>
 
@@ -586,14 +1121,17 @@ html,body{
 </div>
 
 
-<!-- نافذة التحميل -->
+<!-- =========================
+     LOADING
+========================= -->
 
-<div class="overlay" id="loadingOverlay">
+<div class="overlay"
+     id="loadingOverlay">
 
     <div class="dialog loader">
 
         <div class="loader-title">
-            USSD...
+            تشغيل USSD...
         </div>
 
         <div class="spinner"></div>
@@ -606,15 +1144,18 @@ html,body{
 <script>
 
 let dialNumber = "";
+
 let step = 0;
+
 let targetNumber = "";
+
 let transferAmount = "";
+
 let selectedName = "";
 
 
-/* الأسماء */
-
 const names = [
+
     "مصطفى ر***** م*******",
     "أحمد م***** ع*******",
     "محمد س***** ح*******",
@@ -627,12 +1168,16 @@ const names = [
     "علي م***** ح*******",
     "حسن م***** أ*******",
     "طارق ع***** م*******"
+
 ];
+
 
 let usedNames = [];
 
 
-/* تغيير حجم الرقم */
+/* =========================
+   NUMBER SIZE
+========================= */
 
 function updateNumberSize(){
 
@@ -642,92 +1187,144 @@ function updateNumberSize(){
     const length =
         dialNumber.length;
 
-    let size = 29;
+    let size = 31;
 
-    if(length <= 8){
+    if(length <= 8)
+        size = 31;
+
+    else if(length === 9)
         size = 29;
-    }
-    else if(length === 9){
+
+    else if(length === 10)
         size = 28;
-    }
-    else if(length === 10){
-        size = 27;
-    }
-    else if(length === 11){
+
+    else if(length === 11)
         size = 26;
-    }
-    else if(length === 12){
+
+    else if(length === 12)
         size = 24;
-    }
-    else if(length === 13){
-        size = 23;
-    }
-    else if(length === 14){
+
+    else if(length === 13)
+        size = 22;
+
+    else if(length === 14)
         size = 21;
-    }
-    else if(length === 15){
+
+    else if(length === 15)
         size = 20;
-    }
-    else if(length === 16){
-        size = 19;
-    }
-    else{
+
+    else
         size = 18;
-    }
+
 
     display.style.fontSize =
         size + "px";
 
     display.style.letterSpacing =
-        length >= 13 ? "0" : "1px";
+        length >= 13
+        ? "0"
+        : "1px";
+
 }
 
 
-/* إضافة */
+/* =========================
+   ADD
+========================= */
 
 function add(value){
 
     dialNumber += value;
 
-    document.getElementById("display")
-        .textContent = dialNumber;
+    document
+        .getElementById("display")
+        .textContent =
+        dialNumber;
 
     updateNumberSize();
+
 }
 
 
-/* حذف */
+/* =========================
+   DELETE
+========================= */
 
 function deleteNumber(){
 
     dialNumber =
         dialNumber.slice(0,-1);
 
-    document.getElementById("display")
-        .textContent = dialNumber;
+    document
+        .getElementById("display")
+        .textContent =
+        dialNumber;
 
     updateNumberSize();
+
 }
 
 
-/* اسم مختلف */
+/* =========================
+   CLEAR
+========================= */
+
+function clearAll(){
+
+    dialNumber = "";
+
+    document
+        .getElementById("display")
+        .textContent = "";
+
+    updateNumberSize();
+
+}
+
+
+/* =========================
+   THREE DOTS
+========================= */
+
+function moreMenu(){
+
+    if(navigator.vibrate){
+
+        navigator.vibrate(20);
+
+    }
+
+}
+
+
+/* =========================
+   RANDOM NAME
+========================= */
 
 function randomName(){
 
     let available =
         names.filter(
-            name => !usedNames.includes(name)
+            name =>
+            !usedNames.includes(name)
         );
 
+
     if(available.length === 0){
+
         usedNames = [];
+
         available = [...names];
+
     }
+
 
     const index =
         Math.floor(
-            Math.random() * available.length
+            Math.random() *
+            available.length
         );
+
 
     const name =
         available[index];
@@ -735,21 +1332,25 @@ function randomName(){
     usedNames.push(name);
 
     return name;
+
 }
 
 
-/* بدء المحاكاة */
+/* =========================
+   START USSD
+========================= */
 
 function startUSSD(){
 
-    if(dialNumber.trim() === ""){
+    if(dialNumber.trim() === "")
         return;
-    }
+
 
     const match =
         dialNumber.match(
             /^\*9\*7\*(01\d{9})\*(\d+)#?$/
         );
+
 
     if(!match){
 
@@ -759,7 +1360,9 @@ function startUSSD(){
         );
 
         return;
+
     }
+
 
     targetNumber = match[1];
 
@@ -767,14 +1370,20 @@ function startUSSD(){
 
     selectedName = randomName();
 
+
     dialNumber = "";
 
-    document.getElementById("display")
+
+    document
+        .getElementById("display")
         .textContent = "";
+
 
     updateNumberSize();
 
+
     showLoading();
+
 
     setTimeout(function(){
 
@@ -785,62 +1394,99 @@ function startUSSD(){
         showFirstMessage();
 
     },1000);
+
 }
 
 
-/* Loading */
+/* =========================
+   LOADING
+========================= */
 
 function showLoading(){
 
-    document.getElementById("loadingOverlay")
-        .style.display = "flex";
+    document
+        .getElementById("loadingOverlay")
+        .style.display =
+        "flex";
+
 }
+
 
 function hideLoading(){
 
-    document.getElementById("loadingOverlay")
-        .style.display = "none";
+    document
+        .getElementById("loadingOverlay")
+        .style.display =
+        "none";
+
 }
 
 
-/* فتح USSD */
+/* =========================
+   OPEN USSD
+========================= */
 
 function openUSSD(){
 
-    document.getElementById("ussdOverlay")
-        .style.display = "flex";
+    document
+        .getElementById("ussdOverlay")
+        .style.display =
+        "flex";
+
 
     const input =
         document.getElementById("ussdInput");
 
+
     input.value = "";
+
     input.type = "text";
 
-    input.focus();
+    input.placeholder = "";
+
+
+    setTimeout(function(){
+
+        input.focus();
+
+    },50);
+
 }
 
 
-/* إغلاق */
+/* =========================
+   CLOSE USSD
+========================= */
 
 function closeUSSD(){
 
-    document.getElementById("ussdOverlay")
-        .style.display = "none";
+    document
+        .getElementById("ussdOverlay")
+        .style.display =
+        "none";
 
-    document.getElementById("ussdInput")
+
+    document
+        .getElementById("ussdInput")
         .value = "";
 
+
     step = 0;
+
 }
 
 
-/* الرسالة الأولى */
+/* =========================
+   FIRST MESSAGE
+========================= */
 
 function showFirstMessage(){
 
     openUSSD();
 
-    document.getElementById("message")
+
+    document
+        .getElementById("message")
         .textContent =
 
 `تحويل ${transferAmount} ج بالإضافة إلى 1 ج رسوم
@@ -848,31 +1494,41 @@ ${targetNumber} باسم
 ${selectedName}
 0: مزيد`;
 
-    document.getElementById("ussdInput")
-        .placeholder =
-        "";
+
+    document
+        .getElementById("ussdInput")
+        .placeholder = "";
+
 }
 
 
-/* إرسال */
+/* =========================
+   SEND
+========================= */
 
 function sendUSSD(){
 
     const input =
-        document.getElementById("ussdInput")
-            .value.trim();
+        document
+            .getElementById("ussdInput")
+            .value
+            .trim();
 
 
     if(step === 1){
 
-        if(input !== "0"){
+        if(input !== "0")
             return;
-        }
 
-        document.getElementById("ussdOverlay")
-            .style.display = "none";
+
+        document
+            .getElementById("ussdOverlay")
+            .style.display =
+            "none";
+
 
         showLoading();
+
 
         setTimeout(function(){
 
@@ -884,20 +1540,26 @@ function sendUSSD(){
 
         },800);
 
+
         return;
+
     }
 
 
     if(step === 2){
 
-        if(input.length < 1){
+        if(input.length < 1)
             return;
-        }
 
-        document.getElementById("ussdOverlay")
-            .style.display = "none";
+
+        document
+            .getElementById("ussdOverlay")
+            .style.display =
+            "none";
+
 
         showLoading();
+
 
         setTimeout(function(){
 
@@ -909,70 +1571,94 @@ function sendUSSD(){
 
         },1200);
 
+
         return;
+
     }
 
 
     if(step === 3){
 
         if(input === "#9"){
+
             closeUSSD();
+
         }
+
     }
+
 }
 
 
-/* كلمة المرور */
+/* =========================
+   PASSWORD
+========================= */
 
 function showPassword(){
 
     openUSSD();
 
-    document.getElementById("message")
+
+    document
+        .getElementById("message")
         .textContent =
         "أدخل كلمة المرور";
+
 
     const input =
         document.getElementById("ussdInput");
 
+
     input.value = "";
+
     input.type = "password";
 
     input.placeholder =
         "كلمة المرور";
 
     input.focus();
+
 }
 
 
-/* النتيجة المحلية */
+/* =========================
+   RESULT
+========================= */
 
 function showResult(){
 
     openUSSD();
 
+
     const input =
         document.getElementById("ussdInput");
 
+
     input.type = "text";
+
     input.value = "";
 
-    document.getElementById("message")
+
+    document
+        .getElementById("message")
         .textContent =
 
 `تم تحويل ${transferAmount} جنيه لرقم
 ${targetNumber} مصاريف الخدمة 1.0 جنيه
-اطلب #9 و
+اطلب #9* و
 0 مزيد`;
 
-    input.placeholder =
-        "";
+
+    input.placeholder = "";
 
     input.focus();
+
 }
 
 
-/* Enter */
+/* =========================
+   ENTER
+========================= */
 
 document.addEventListener(
     "keydown",
@@ -980,23 +1666,29 @@ document.addEventListener(
 
         if(
             event.key === "Enter" &&
-            document.getElementById(
-                "ussdOverlay"
-            ).style.display === "flex"
+            document
+                .getElementById("ussdOverlay")
+                .style.display === "flex"
         ){
+
             sendUSSD();
+
         }
 
     }
 );
 
 
-/* منع القائمة */
+/* =========================
+   PREVENT MENU
+========================= */
 
 document.addEventListener(
     "contextmenu",
     function(event){
+
         event.preventDefault();
+
     }
 );
 

@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>USSD Simulator</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    margin:0;
+    overflow:hidden;
+    background:#111;
+    font-family:Arial,Tahoma,sans-serif;
+}
+
+.phone{
+    width:100%;
+    max-width:400px;
+    height:96vh;
+    margin:2vh auto;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow:hidden;
+    border-radius:18px;
+}
+
+/* علامة المحاكاة */
+.simulation{
+    position:absolute;
+    top:7px;
+    right:8px;
+    z-index:20;
+    background:#555;
+    color:#fff;
+    padding:4px 8px;
+    border-radius:12px;
+    font-size:8px;
+}
+
+/* الأعلى */
+.top{
+    height:50px;
+    min-height:50px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+    display:flex;
+    align-items:center;
+    padding:0 18px;
+}
+
+.close{
+    font-size:30px;
+    font-weight:300;
+    color:#333;
+}
+
+/* الاختيارات */
+.actions{
+    height:180px;
+    min-height:180px;
+    background:#fff;
+    padding:10px 22px;
+}
+
+.action{
+    height:52px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    color:#333;
+    font-size:17px;
+}
+
+.action-icon{
+    width:27px;
+    text-align:center;
+    font-size:23px;
+}
+
+/* الرقم */
+.number-area{
+    height:78px;
+    min-height:78px;
+    background:#fff;
+    position:relative;
+    display:flex;
+    align-items:center;
+    padding:0 55px;
+    overflow:hidden;
+}
+
+.number{
+    width:100%;
+    height:52px;
+    line-height:52px;
+    direction:ltr;
+    unicode-bidi:plaintext;
+    font-size:29px;
+    font-weight:400;
+    letter-spacing:1px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-align:center;
+    transition:font-size .13s ease,
+               letter-spacing .13s ease;
+}
+
+.delete{
+    position:absolute;
+    left:19px;
+    top:23px;
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:23px;
+    color:#555;
+    z-index:3;
+    cursor:pointer;
+}
+
+/* لوحة الأرقام */
+.keypad{
+    flex:1;
+    min-height:0;
+    padding:5px 18px 7px;
+    background:#fff;
+    direction:ltr;
+}
+
+.keys{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    direction:ltr;
+}
+
+.key{
+    height:57px;
+    border:0;
+    border-radius:31px;
+    background:#f3efec;
+    color:#333;
+    font-family:Arial,Tahoma,sans-serif;
+    font-size:23px;
+    font-weight:400;
+    text-align:center;
+    direction:ltr;
+    cursor:pointer;
+    transition:transform .08s,background .08s;
+}
+
+.key small{
+    display:block;
+    font-size:9px;
+    font-weight:400;
+    letter-spacing:1px;
+    margin-top:2px;
+}
+
+.key:active{
+    transform:scale(.96);
+    background:#e7e2df;
+}
+
+/* منطقة الاتصال */
+.call-box{
+    height:68px;
+    min-height:68px;
+    flex-shrink:0;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+}
+
+.call{
+    width:195px;
+    height:53px;
+    border:0;
+    border-radius:30px;
+    background:#23843b;
+    color:#fff;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.call:active{
+    transform:scale(.97);
+}
+
+/* الأسفل */
+.bottom{
+    height:60px;
+    min-height:60px;
+    flex-shrink:0;
+    background:#fff;
+    border-top:1px solid #eee;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    color:#666;
+}
+
+.bottom-item{
+    text-align:center;
+    font-size:11px;
+}
+
+.bottom-icon{
+    display:block;
+    font-size:22px;
+    margin-bottom:2px;
+}
+
+/* النوافذ */
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.32);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+}
+
+/* نافذة USSD */
+.dialog{
+    width:90%;
+    max-width:330px;
+    background:#fffaf7;
+    border-radius:22px;
+    padding:18px 18px 13px;
+    box-shadow:0 10px 35px rgba(0,0,0,.28);
+    animation:pop .18s ease;
+}
+
+@keyframes pop{
+    from{
+        transform:scale(.93);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+/*
+   الترتيب المطلوب:
+   1 على اليمين
+   ثم رسالة
+   ثم Vodafone
+*/
+.dialog-header{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    direction:rtl;
+    gap:6px;
+    font-size:17px;
+    color:#222;
+    margin-bottom:12px;
+}
+
+.ussd-text{
+    direction:ltr;
+    display:inline-block;
+}
+
+.badge{
+    display:inline-flex;
+    width:29px;
+    height:29px;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    background:#e52c3d;
+    color:#fff;
+    font-size:16px;
+    font-weight:bold;
+    flex-shrink:0;
+}
+
+/* الرسالة */
+.message{
+    min-height:0;
+    color:#333;
+    font-size:15px;
+    line-height:1.5;
+    text-align:right;
+    white-space:pre-line;
+    margin:0;
+}
+
+/* الإدخال */
+.ussd-input{
+    width:100%;
+    height:38px;
+    border:0;
+    border-bottom:1px solid #777;
+    outline:none;
+    background:transparent;
+    font-size:16px;
+    direction:ltr;
+    text-align:right;
+    margin-top:7px;
+}
+
+/* الأزرار */
+.buttons{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:10px;
+}
+
+.buttons button{
+    border:0;
+    background:transparent;
+    color:#777;
+    font-size:15px;
+    padding:5px 14px;
+    cursor:pointer;
+}
+
+.buttons .send{
+    color:#333;
+}
+
+/* التحميل */
+.loader{
+    width:220px;
+    max-width:220px;
+    text-align:center;
+    padding:17px 14px 15px;
+}
+
+.loader-title{
+    font-size:17px;
+    color:#333;
+}
+
+/* دائرة متساوية تمامًا */
+.spinner{
+    width:36px;
+    height:36px;
+    min-width:36px;
+    min-height:36px;
+    margin:15px auto 1px;
+    border:4px solid #ddd;
+    border-top:4px solid #23843b;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    display:block;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* شاشات قصيرة */
+@media(max-height:650px){
+
+    .phone{
+        width:100%;
+        height:100vh;
+        margin:0 auto;
+        border-radius:0;
+    }
+
+    .actions{
+        height:155px;
+        min-height:155px;
+    }
+
+    .action{
+        height:45px;
+    }
+
+    .number-area{
+        height:72px;
+        min-height:72px;
+    }
+
+    .key{
+        height:50px;
+    }
+
+    .call-box{
+        height:62px;
+        min-height:62px;
+    }
+
+    .bottom{
+        height:55px;
+        min-height:55px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+    <div class="simulation"> </div>
+
+    <div class="top">
+        <div class="close">×</div>
+    </div>
+
+    <div class="actions">
+
+        <div class="action">
+            <div class="action-icon">♙</div>
+            <div>إنشاء جهة اتصال جديدة</div>
+        </div>
+
+        <div class="action">
+            <div class="action-icon">♙</div>
+            <div>إضافة إلى جهة اتصال</div>
+        </div>
+
+        <div class="action">
+            <div class="action-icon">◯</div>
+            <div>إرسال رسالة</div>
+        </div>
+
+    </div>
+
+    <div class="number-area">
+
+        <div class="delete" onclick="deleteNumber()">
+            ⌫
+        </div>
+
+        <div class="number" id="display"></div>
+
+    </div>
+
+    <div class="keypad">
+
+        <div class="keys">
+
+            <button class="key" onclick="add('1')">1</button>
+
+            <button class="key" onclick="add('2')">
+                2
+                <small>ABC</small>
+            </button>
+
+            <button class="key" onclick="add('3')">
+                3
+                <small>DEF</small>
+            </button>
+
+            <button class="key" onclick="add('4')">
+                4
+                <small>GHI</small>
+            </button>
+
+            <button class="key" onclick="add('5')">
+                5
+                <small>JKL</small>
+            </button>
+
+            <button class="key" onclick="add('6')">
+                6
+                <small>MNO</small>
+            </button>
+
+            <button class="key" onclick="add('7')">
+                7
+                <small>PQRS</small>
+            </button>
+
+            <button class="key" onclick="add('8')">
+                8
+                <small>TUV</small>
+            </button>
+
+            <button class="key" onclick="add('9')">
+                9
+                <small>WXYZ</small>
+            </button>
+
+            <button class="key" onclick="add('*')">
+                *
+            </button>
+
+            <button class="key" onclick="add('0')">
+                0
+                <small>+</small>
+            </button>
+
+            <button class="key" onclick="add('#')">
+                #
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="call-box">
+
+        <button class="call" onclick="startUSSD()">
+             اتصال
+        </button>
+
+    </div>
+
+    <div class="bottom">
+
+        <div class="bottom-item">
+            <span class="bottom-icon">⌂</span>
+            الصفحة الرئيسية
+        </div>
+
+        <div class="bottom-item">
+            <span class="bottom-icon">⠿</span>
+            لوحة المفاتيح
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- نافذة USSD -->
+
+<div class="overlay" id="ussdOverlay">
+
+    <div class="dialog">
+
+        <div class="dialog-header">
+
+            <span class="badge">1</span>
+
+            <span>رسالة</span>
+
+            <span class="ussd-text">
+                Vodafone
+            </span>
+
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <input
+            id="ussdInput"
+            class="ussd-input"
+            autocomplete="off"
+            inputmode="numeric">
+
+        <div class="buttons">
+
+            <button onclick="closeUSSD()">
+                إلغاء
+            </button>
+
+            <button class="send" onclick="sendUSSD()">
+                إرسال
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- نافذة التحميل -->
+
+<div class="overlay" id="loadingOverlay">
+
+    <div class="dialog loader">
+
+        <div class="loader-title">
+            USSD...
+        </div>
+
+        <div class="spinner"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let dialNumber = "";
+let step = 0;
+let targetNumber = "";
+let transferAmount = "";
+let selectedName = "";
+
+
+/* الأسماء */
+
+const names = [
+    "مصطفى ر***** م*******",
+    "أحمد م***** ع*******",
+    "محمد س***** ح*******",
+    "محمود أ***** ر*******",
+    "كريم ع***** م*******",
+    "عبدالله م***** س*******",
+    "يوسف أ***** ح*******",
+    "عمر م***** ع*******",
+    "إبراهيم س***** م*******",
+    "علي م***** ح*******",
+    "حسن م***** أ*******",
+    "طارق ع***** م*******"
+];
+
+let usedNames = [];
+
+
+/* تغيير حجم الرقم */
+
+function updateNumberSize(){
+
+    const display =
+        document.getElementById("display");
+
+    const length =
+        dialNumber.length;
+
+    let size = 29;
+
+    if(length <= 8){
+        size = 29;
+    }
+    else if(length === 9){
+        size = 28;
+    }
+    else if(length === 10){
+        size = 27;
+    }
+    else if(length === 11){
+        size = 26;
+    }
+    else if(length === 12){
+        size = 24;
+    }
+    else if(length === 13){
+        size = 23;
+    }
+    else if(length === 14){
+        size = 21;
+    }
+    else if(length === 15){
+        size = 20;
+    }
+    else if(length === 16){
+        size = 19;
+    }
+    else{
+        size = 18;
+    }
+
+    display.style.fontSize =
+        size + "px";
+
+    display.style.letterSpacing =
+        length >= 13 ? "0" : "1px";
+}
+
+
+/* إضافة */
+
+function add(value){
+
+    dialNumber += value;
+
+    document.getElementById("display")
+        .textContent = dialNumber;
+
+    updateNumberSize();
+}
+
+
+/* حذف */
+
+function deleteNumber(){
+
+    dialNumber =
+        dialNumber.slice(0,-1);
+
+    document.getElementById("display")
+        .textContent = dialNumber;
+
+    updateNumberSize();
+}
+
+
+/* اسم مختلف */
+
+function randomName(){
+
+    let available =
+        names.filter(
+            name => !usedNames.includes(name)
+        );
+
+    if(available.length === 0){
+        usedNames = [];
+        available = [...names];
+    }
+
+    const index =
+        Math.floor(
+            Math.random() * available.length
+        );
+
+    const name =
+        available[index];
+
+    usedNames.push(name);
+
+    return name;
+}
+
+
+/* بدء المحاكاة */
+
+function startUSSD(){
+
+    if(dialNumber.trim() === ""){
+        return;
+    }
+
+    const match =
+        dialNumber.match(
+            /^\*9\*7\*(01\d{9})\*(\d+)#?$/
+        );
+
+    if(!match){
+
+        alert(
+            "اكتب الكود بالشكل:\n\n" +
+            "*9*7*010XXXXXXXX*500"
+        );
+
+        return;
+    }
+
+    targetNumber = match[1];
+
+    transferAmount = match[2];
+
+    selectedName = randomName();
+
+    dialNumber = "";
+
+    document.getElementById("display")
+        .textContent = "";
+
+    updateNumberSize();
+
+    showLoading();
+
+    setTimeout(function(){
+
+        hideLoading();
+
+        step = 1;
+
+        showFirstMessage();
+
+    },1000);
+}
+
+
+/* Loading */
+
+function showLoading(){
+
+    document.getElementById("loadingOverlay")
+        .style.display = "flex";
+}
+
+function hideLoading(){
+
+    document.getElementById("loadingOverlay")
+        .style.display = "none";
+}
+
+
+/* فتح USSD */
+
+function openUSSD(){
+
+    document.getElementById("ussdOverlay")
+        .style.display = "flex";
+
+    const input =
+        document.getElementById("ussdInput");
+
+    input.value = "";
+    input.type = "text";
+
+    input.focus();
+}
+
+
+/* إغلاق */
+
+function closeUSSD(){
+
+    document.getElementById("ussdOverlay")
+        .style.display = "none";
+
+    document.getElementById("ussdInput")
+        .value = "";
+
+    step = 0;
+}
+
+
+/* الرسالة الأولى */
+
+function showFirstMessage(){
+
+    openUSSD();
+
+    document.getElementById("message")
+        .textContent =
+
+`تحويل ${transferAmount} ج بالإضافة إلى 1 ج رسوم
+${targetNumber} باسم
+${selectedName}
+0: مزيد`;
+
+    document.getElementById("ussdInput")
+        .placeholder =
+        "";
+}
+
+
+/* إرسال */
+
+function sendUSSD(){
+
+    const input =
+        document.getElementById("ussdInput")
+            .value.trim();
+
+
+    if(step === 1){
+
+        if(input !== "0"){
+            return;
+        }
+
+        document.getElementById("ussdOverlay")
+            .style.display = "none";
+
+        showLoading();
+
+        setTimeout(function(){
+
+            hideLoading();
+
+            step = 2;
+
+            showPassword();
+
+        },800);
+
+        return;
+    }
+
+
+    if(step === 2){
+
+        if(input.length < 1){
+            return;
+        }
+
+        document.getElementById("ussdOverlay")
+            .style.display = "none";
+
+        showLoading();
+
+        setTimeout(function(){
+
+            hideLoading();
+
+            step = 3;
+
+            showResult();
+
+        },1200);
+
+        return;
+    }
+
+
+    if(step === 3){
+
+        if(input === "#9"){
+            closeUSSD();
+        }
+    }
+}
+
+
+/* كلمة المرور */
+
+function showPassword(){
+
+    openUSSD();
+
+    document.getElementById("message")
+        .textContent =
+        "أدخل كلمة المرور";
+
+    const input =
+        document.getElementById("ussdInput");
+
+    input.value = "";
+    input.type = "password";
+
+    input.placeholder =
+        "كلمة المرور";
+
+    input.focus();
+}
+
+
+/* النتيجة المحلية */
+
+function showResult(){
+
+    openUSSD();
+
+    const input =
+        document.getElementById("ussdInput");
+
+    input.type = "text";
+    input.value = "";
+
+    document.getElementById("message")
+        .textContent =
+
+`تم تحويل ${transferAmount} جنيه لرقم
+${targetNumber} مصاريف الخدمة 1.0 جنيه
+اطلب #9 و
+0 مزيد`;
+
+    input.placeholder =
+        "";
+
+    input.focus();
+}
+
+
+/* Enter */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Enter" &&
+            document.getElementById(
+                "ussdOverlay"
+            ).style.display === "flex"
+        ){
+            sendUSSD();
+        }
+
+    }
+);
+
+
+/* منع القائمة */
+
+document.addEventListener(
+    "contextmenu",
+    function(event){
+        event.preventDefault();
+    }
+);
+
+</script>
+
+</body>
+</html>

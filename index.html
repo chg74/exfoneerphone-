@@ -26,25 +26,27 @@ html,body{
     margin:0;
     padding:0;
     overflow:hidden;
-    background:#000;
+    background:#fff;
     font-family:Arial,Tahoma,sans-serif;
+}
+
+body{
+    width:100vw;
+    height:100vh;
 }
 
 .phone{
     position:relative;
-    width:calc(100% - 18px);
-    height:calc(100% - 28px);
-    margin:14px auto;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
     background:#fff;
     overflow:hidden;
-    border-radius:30px;
-
+    border-radius:0;
     display:flex;
     flex-direction:column;
-
-    box-shadow:
-        0 0 0 2px #080808,
-        0 8px 35px rgba(0,0,0,.5);
+    box-shadow:none;
 }
 
 
@@ -54,18 +56,13 @@ html,body{
 
 .top{
     position:relative;
-
     height:78px;
     min-height:78px;
-
     background:#fff;
-
     border:0;
-
     display:flex;
     align-items:flex-start;
     justify-content:flex-start;
-
     padding:24px 20px 0;
 }
 
@@ -77,34 +74,22 @@ html,body{
 .actions{
     height:185px;
     min-height:185px;
-
     background:#fff;
-
     padding:4px 30px 0;
-
     direction:ltr;
-
-    /* رفع الكلام الإنجليزي لفوق */
     position:relative;
     top:-48px;
 }
 
 .action{
     height:55px;
-
     display:flex;
     align-items:center;
     justify-content:flex-start;
-
     flex-direction:row;
-
     gap:18px;
-
     color:#333;
-
-    /* تصغير الكلام شوية */
     font-size:17px;
-
     white-space:nowrap;
     direction:ltr;
 }
@@ -117,11 +102,9 @@ html,body{
     width:32px;
     min-width:32px;
     height:38px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     position:relative;
 }
 
@@ -132,32 +115,23 @@ html,body{
 
 .person-icon{
     position:relative;
-
     width:15px;
     height:15px;
-
     border:2px solid #555;
     border-radius:50%;
-
     top:-9px;
 }
 
 .person-icon::after{
     content:"";
-
     position:absolute;
-
     width:25px;
     height:16px;
-
     left:50%;
     transform:translateX(-50%);
-
     top:16px;
-
     border:2px solid #555;
     border-bottom:0;
-
     border-radius:18px 18px 0 0;
 }
 
@@ -168,30 +142,22 @@ html,body{
 
 .message-icon{
     position:relative;
-
     width:31px;
     height:25px;
-
     border:2px solid #555;
     border-radius:50%;
 }
 
 .message-icon::after{
     content:"";
-
     position:absolute;
-
     left:3px;
     bottom:-6px;
-
     width:9px;
     height:9px;
-
     border-left:2px solid #555;
     border-bottom:2px solid #555;
-
     transform:rotate(-18deg);
-
     background:#fff;
 }
 
@@ -203,35 +169,25 @@ html,body{
 .number-area{
     height:80px;
     min-height:80px;
-
     position:relative;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     background:#fff;
-
     padding:0 70px;
 }
 
 .number{
     width:100%;
     height:55px;
-
     line-height:55px;
-
     direction:ltr;
     unicode-bidi:plaintext;
-
     text-align:center;
-
     white-space:nowrap;
     overflow:hidden;
-
     font-size:31px;
     font-weight:400;
-
     letter-spacing:1px;
 
     transition:
@@ -246,21 +202,15 @@ html,body{
 
 .delete{
     position:absolute;
-
     left:23px;
     top:22px;
-
     width:42px;
     height:38px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     color:#555;
-
     font-size:29px;
-
     cursor:pointer;
 }
 
@@ -271,27 +221,19 @@ html,body{
 
 .more{
     position:absolute;
-
     right:18px;
     top:18px;
-
     width:38px;
     height:44px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     background:transparent;
     border:0;
-
     color:#444;
-
     font-size:30px;
     line-height:1;
-
     cursor:pointer;
-
     padding:0;
 }
 
@@ -307,43 +249,30 @@ html,body{
 .keypad{
     flex:1;
     min-height:0;
-
     background:#fff;
-
     padding:6px 22px 2px;
-
     direction:ltr;
 }
 
 .keys{
     width:100%;
-
     display:grid;
-
     grid-template-columns:repeat(3,1fr);
-
     gap:9px;
-
     direction:ltr;
 }
 
 .key{
     height:61px;
-
     border:0;
     border-radius:34px;
-
     background:#f3f0ed;
     color:#333;
-
     font-family:Arial,Tahoma,sans-serif;
-
     font-size:25px;
     font-weight:400;
-
     text-align:center;
     direction:ltr;
-
     cursor:pointer;
     padding:0;
 
@@ -354,14 +283,10 @@ html,body{
 
 .key small{
     display:block;
-
     font-size:10px;
     line-height:12px;
-
     font-weight:400;
-
     letter-spacing:1px;
-
     margin-top:2px;
 }
 
@@ -372,28 +297,36 @@ html,body{
 
 
 /* =========================
-   CALL
+   CALL UNDER ZERO
 ========================= */
 
-.call-box{
-    height:58px;
-    min-height:58px;
+.call-row{
+    width:100%;
 
-    flex-shrink:0;
+    display:grid;
 
-    background:#fff;
+    grid-template-columns:repeat(3,1fr);
 
-    display:flex;
+    gap:9px;
 
-    align-items:flex-start;
-    justify-content:center;
+    margin-top:9px;
 
-    padding:0 0 4px;
+    direction:ltr;
+}
+
+.call-empty{
+    height:50px;
 }
 
 .call{
+    grid-column:2;
+
     width:175px;
+    max-width:100%;
+
     height:50px;
+
+    justify-self:center;
 
     border:0;
     border-radius:30px;
@@ -402,7 +335,6 @@ html,body{
     color:#fff;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
@@ -475,7 +407,6 @@ html,body{
 
 .bottom-item{
     width:50%;
-
     height:58px;
 
     display:flex;
@@ -526,6 +457,9 @@ html,body{
     position:fixed;
 
     inset:0;
+
+    width:100vw;
+    height:100vh;
 
     background:rgba(0,0,0,.30);
 
@@ -591,7 +525,6 @@ html,body{
 
 .ussd-text{
     direction:ltr;
-
     display:inline-block;
 }
 
@@ -744,35 +677,28 @@ html,body{
 @media(max-height:700px){
 
     .phone{
-        width:calc(100% - 12px);
-
-        height:calc(100% - 12px);
-
-        margin:6px auto;
-
-        border-radius:25px;
+        width:100%;
+        height:100%;
+        margin:0;
+        border-radius:0;
+        box-shadow:none;
     }
 
     .top{
         height:65px;
         min-height:65px;
-
         padding-top:19px;
     }
 
     .actions{
         height:150px;
         min-height:150px;
-
         padding-top:0;
-
-        /* رفع الكلام لفوق حتى في الشاشة القصيرة */
         top:-48px;
     }
 
     .action{
         height:46px;
-
         font-size:16px;
     }
 
@@ -794,17 +720,13 @@ html,body{
         height:50px;
     }
 
-    .call-box{
-        height:53px;
-        min-height:53px;
-
-        padding:0 0 3px;
+    .call-row{
+        margin-top:7px;
     }
 
     .call{
-        width:165px;
         height:46px;
-
+        width:165px;
         font-size:19px;
     }
 
@@ -821,8 +743,6 @@ html,body{
     .bottom{
         height:55px;
         min-height:55px;
-
-        border-top:0;
     }
 
     .bottom-item{
@@ -831,14 +751,11 @@ html,body{
 }
 
 
-/* =========================
-   LARGE PHONE
-========================= */
-
 @media(min-width:431px){
 
     .phone{
-        max-width:430px;
+        width:100%;
+        max-width:none;
     }
 }
 
@@ -988,49 +905,53 @@ html,body{
 
         </div>
 
-    </div>
 
+        <!-- اتصال تحت الصفر مباشرة -->
 
-    <!-- CALL -->
+        <div class="call-row">
 
-    <div class="call-box">
+            <div class="call-empty"></div>
 
-        <button class="call"
-                onclick="startUSSD()">
+            <button class="call"
+                    onclick="startUSSD()">
 
-            <span class="call-icon">
+                <span class="call-icon">
 
-                <svg viewBox="0 0 24 24"
-                     xmlns="http://www.w3.org/2000/svg">
+                    <svg viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
 
-                    <path d="
-                    M6.62 10.79
-                    C8.06 13.62 10.38 15.94 13.21 17.38
-                    L15.41 15.18
-                    C15.69 14.90 16.08 14.81 16.44 14.93
-                    C17.59 15.31 18.82 15.52 20.09 15.52
-                    C20.64 15.52 21.09 15.97 21.09 16.52
-                    V20.01
-                    C21.09 20.56 20.64 21.01 20.09 21.01
-                    C10.65 21.01 3 13.36 3 3.92
-                    C3 3.37 3.45 2.92 4 2.92
-                    H7.5
-                    C8.05 2.92 8.5 3.37 8.5 3.92
-                    C8.5 5.19 8.71 6.42 9.09 7.57
-                    C9.21 7.93 9.12 8.32 8.84 8.60
-                    L6.62 10.79
-                    Z
-                    "/>
+                        <path d="
+                        M6.62 10.79
+                        C8.06 13.62 10.38 15.94 13.21 17.38
+                        L15.41 15.18
+                        C15.69 14.90 16.08 14.81 16.44 14.93
+                        C17.59 15.31 18.82 15.52 20.09 15.52
+                        C20.64 15.52 21.09 15.97 21.09 16.52
+                        V20.01
+                        C21.09 20.56 20.64 21.01 20.09 21.01
+                        C10.65 21.01 3 13.36 3 3.92
+                        C3 3.37 3.45 2.92 4 2.92
+                        H7.5
+                        C8.05 2.92 8.5 3.37 8.5 3.92
+                        C8.5 5.19 8.71 6.42 9.09 7.57
+                        C9.21 7.93 9.12 8.32 8.84 8.60
+                        L6.62 10.79
+                        Z
+                        "/>
 
-                </svg>
+                    </svg>
 
-            </span>
+                </span>
 
-            <span>
-                اتصال
-            </span>
+                <span>
+                    اتصال
+                </span>
 
-        </button>
+            </button>
+
+            <div class="call-empty"></div>
+
+        </div>
 
     </div>
 
@@ -1154,25 +1075,370 @@ let transferAmount = "";
 let selectedName = "";
 
 
-const names = [
+/* =====================================================
+   أسماء كثيرة جداً - يتم تركيب أسماء جديدة تلقائياً
+===================================================== */
 
-    "مصطفى ر***** م*******",
-    "أحمد م***** ع*******",
-    "محمد س***** ح*******",
-    "محمود أ***** ر*******",
-    "كريم ع***** م*******",
-    "عبدالله م***** س*******",
-    "يوسف أ***** ح*******",
-    "عمر م***** ع*******",
-    "إبراهيم س***** م*******",
-    "علي م***** ح*******",
-    "حسن م***** أ*******",
-    "طارق ع***** م*******"
+const firstNames = [
+
+"أحمد",
+"محمد",
+"محمود",
+"مصطفى",
+"كريم",
+"يوسف",
+"عمر",
+"إبراهيم",
+"علي",
+"حسن",
+"حسين",
+"طارق",
+"خالد",
+"وليد",
+"عمرو",
+"شريف",
+"إسلام",
+"إيهاب",
+"هاني",
+"تامر",
+"رامي",
+"مازن",
+"زياد",
+"مالك",
+"معاذ",
+"ياسين",
+"يحيى",
+"سيف",
+"سليم",
+"فارس",
+"باسم",
+"حازم",
+"حاتم",
+"هيثم",
+"شادي",
+"نبيل",
+"نادر",
+"جمال",
+"جابر",
+"جلال",
+"رجب",
+"رضا",
+"رمزي",
+"رفعت",
+"رأفت",
+"منير",
+"منصور",
+"كمال",
+"فؤاد",
+"عصام",
+"علاء",
+"عماد",
+"وائل",
+"وجيه",
+"ياسر",
+"أمين",
+"أشرف",
+"سامح",
+"بسام",
+"صبري",
+"صلاح",
+"صابر",
+"مجدي",
+"محسن",
+"مختار",
+"مراد",
+"مروان",
+"أنس",
+"نور",
+"حسام",
+"رائد",
+"رامز",
+"ماهر",
+"فادي",
+"سعيد",
+"سامي",
+"سالم",
+"ساهر",
+"فريد",
+"بدر",
+"أيمن",
+"مؤمن",
+"عبدالله",
+"عبدالرحمن",
+"عبدالعزيز",
+"عبدالحميد",
+"عبدالفتاح",
+"عبدالحليم",
+"عبدالسلام",
+"عبدالناصر",
+"عبداللطيف",
+"عبدالمجيد"
 
 ];
 
 
-let usedNames = [];
+const middleNames = [
+
+"محمد",
+"محمود",
+"مصطفى",
+"أحمد",
+"علي",
+"حسن",
+"حسين",
+"إبراهيم",
+"عبدالله",
+"عبدالرحمن",
+"عبدالعزيز",
+"عبدالحميد",
+"عبدالفتاح",
+"خالد",
+"طارق",
+"عمرو",
+"وليد",
+"كريم",
+"يوسف",
+"عمر",
+"سعيد",
+"سامي",
+"سالم",
+"عادل",
+"عاطف",
+"مجدي",
+"صلاح",
+"صابر",
+"شريف",
+"إسلام",
+"إيهاب",
+"هاني",
+"تامر",
+"رامي",
+"رامز",
+"مازن",
+"زياد",
+"مالك",
+"معاذ",
+"ياسين",
+"يحيى",
+"سيف",
+"سليم",
+"فارس",
+"باسم",
+"حازم",
+"حاتم",
+"هيثم",
+"شادي",
+"نبيل",
+"نادر",
+"جمال",
+"جابر",
+"جلال",
+"رجب",
+"رضا",
+"رمزي",
+"رفعت",
+"رأفت",
+"منير",
+"منصور",
+"كمال",
+"فؤاد",
+"عصام",
+"علاء",
+"عماد",
+"وائل",
+"وجيه",
+"ياسر",
+"أمين",
+"أشرف",
+"سامح",
+"بسام",
+"صبري",
+"مراد",
+"مروان",
+"أنس",
+"نور",
+"حسام",
+"رائد",
+"فادي",
+"سعيد",
+"فريد",
+"بدر",
+"أيمن",
+"مؤمن"
+
+];
+
+
+const familyNames = [
+
+"محمد",
+"محمود",
+"مصطفى",
+"أحمد",
+"علي",
+"حسن",
+"حسين",
+"إبراهيم",
+"عبدالله",
+"عبدالرحمن",
+"عبدالعزيز",
+"عبدالحميد",
+"عبدالفتاح",
+"السيد",
+"سالم",
+"سعيد",
+"عمر",
+"خالد",
+"طارق",
+"كريم",
+"يوسف",
+"عادل",
+"عاطف",
+"مجدي",
+"صلاح",
+"صابر",
+"شريف",
+"إسلام",
+"إيهاب",
+"هاني",
+"تامر",
+"رامي",
+"رامز",
+"مازن",
+"زياد",
+"مالك",
+"معاذ",
+"ياسين",
+"يحيى",
+"سيف",
+"سليم",
+"فارس",
+"باسم",
+"حازم",
+"حاتم",
+"هيثم",
+"شادي",
+"نبيل",
+"نادر",
+"جمال",
+"جابر",
+"جلال",
+"رجب",
+"رضا",
+"رمزي",
+"رفعت",
+"رأفت",
+"منير",
+"منصور",
+"كمال",
+"فؤاد",
+"عصام",
+"علاء",
+"عماد",
+"وائل",
+"وجيه",
+"ياسر",
+"أمين",
+"أشرف",
+"سامح",
+"بسام",
+"صبري",
+"مراد",
+"مروان",
+"أنس",
+"نور",
+"حسام",
+"رائد",
+"رامز",
+"ماهر",
+"فادي",
+"سعيد",
+"فريد",
+"بدر",
+"أيمن",
+"مؤمن",
+"النجار",
+"الحداد",
+"العطار",
+"السعدني",
+"الشرقاوي",
+"الشناوي",
+"البدوي",
+"المرسي",
+"البحيري",
+"الصاوي",
+"الرفاعي",
+"الشافعي",
+"الحمزاوي",
+"النوبي",
+"الأسواني",
+"القناوي",
+"المنوفي",
+"الفيومي",
+"الدسوقي",
+"الدمياطي",
+"السويسي",
+"الإسكندراني",
+"الجيزاوي",
+"القاهري",
+"العربي",
+"المصري"
+
+];
+
+
+/* =========================
+   اختيار عشوائي
+========================= */
+
+function randomItem(array){
+
+    return array[
+        Math.floor(
+            Math.random() * array.length
+        )
+    ];
+
+}
+
+
+/* =========================
+   إخفاء الاسم بالنجوم
+========================= */
+
+function maskName(name){
+
+    if(!name)
+        return "*****";
+
+    return name.charAt(0) + "*****";
+
+}
+
+
+/* =========================
+   إنشاء اسم جديد
+========================= */
+
+function randomName(){
+
+    const first =
+        randomItem(firstNames);
+
+    const middle =
+        randomItem(middleNames);
+
+    const family =
+        randomItem(familyNames);
+
+
+    return first +
+        " " +
+        maskName(middle) +
+        " " +
+        maskName(family);
+
+}
 
 
 /* =========================
@@ -1293,45 +1559,6 @@ function moreMenu(){
         navigator.vibrate(20);
 
     }
-
-}
-
-
-/* =========================
-   RANDOM NAME
-========================= */
-
-function randomName(){
-
-    let available =
-        names.filter(
-            name =>
-            !usedNames.includes(name)
-        );
-
-
-    if(available.length === 0){
-
-        usedNames = [];
-
-        available = [...names];
-
-    }
-
-
-    const index =
-        Math.floor(
-            Math.random() *
-            available.length
-        );
-
-
-    const name =
-        available[index];
-
-    usedNames.push(name);
-
-    return name;
 
 }
 
@@ -1695,4 +1922,4 @@ document.addEventListener(
 </script>
 
 </body>
-</html>
+            </html>
